@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace Aplication.Behaviours
 {
-    public class ValidationBeahaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
+    public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
     {
         private readonly IEnumerable<IValidator<TRequest>> _validators;
 
-        public ValidationBeahaviour(IEnumerable<IValidator<TRequest>> validators)
+        public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
         {
             _validators = validators;
         }
@@ -27,7 +27,7 @@ namespace Aplication.Behaviours
                 var failures = validationResults.SelectMany(r => r.Errors).Where(f => f != null).ToList();  
 
                 if (failures.Count != 0) {
-                    throw new Exceptions.ValidationException(failures);
+                    throw new FluentValidation.ValidationException(failures);
                 }
             }
 
