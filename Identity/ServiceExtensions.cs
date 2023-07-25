@@ -1,13 +1,17 @@
-﻿using Domain.Settings;
+﻿using Aplication.Wrappers;
+using Domain.Settings;
 using Identity.Context;
 using Identity.Models;
+using Identity.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +28,9 @@ namespace Identity
             configuration.GetConnectionString("IdentityConnection"),
             b => b.MigrationsAssembly(typeof(IdentityContext).Assembly.FullName)));
             services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<IdentityContext>().AddDefaultTokenProviders();
+            #region Services
+            //services.AddTransient<AccountService>();
+            #endregion
             services.Configure<JWTSettings>(configuration.GetSection("JWTSettings"));
             services.AddAuthentication(options =>
             {
@@ -44,6 +51,35 @@ namespace Identity
                     ValidIssuer = configuration["JWTSettings:Issuer"],
                     ValidAudience = configuration["JWTSettings:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWTSettings:key"]))
+                };
+
+
+                o.Events = new JwtBearerEvents()
+                {
+                    OnAuthenticationFailed = c =>
+                    {
+                        c.NoResult();
+                        c.Response.StatusCode = 500;
+                        c.Response.ContentType = "text/plain";
+                        return c.Response.WriteAsync(c.Exception.ToString());
+                    },
+                    OnChallenge = context =>
+                    {
+                        context.HandleResponse();
+                        context.Response.StatusCode = 401;
+                        context.Response.ContentType = "application/json";
+                        var result = JsonConvert.SerializeObject(new Response<string>("Usted no está autorizado"));
+                        return context.Response.WriteAsync(result);
+                    },
+
+                    OnForbidden = Context =>
+                    {
+                        Context.Response.StatusCode = 400;
+                        Context.Response.ContentType = "application/json";
+                        var result = JsonConvert.SerializeObject(new Response<string>("Usted no tiene permisos sobre este recurso"));
+                        return Context.Response.WriteAsync(result);
+                    }
+
                 };
             }
             );

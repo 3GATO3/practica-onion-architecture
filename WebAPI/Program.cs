@@ -9,30 +9,45 @@ using WebAPI.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Identity.Models;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Identity;
+using Identity.Seeds;
 
 namespace WebAPI
 {
     public class Program
     {
-        public  static void Main(string[] args)
+        public  static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
 
-           
-                // builder.Services.AddScoped<UserManager<ApplicationUser>>();
-                //builder.Services.AddScoped<RoleManager<IdentityRole>>();
-            
-           
 
-            
+            // builder.Services.AddScoped<UserManager<ApplicationUser>>();
+            //builder.Services.AddScoped<RoleManager<IdentityRole>>();
+            try
+            {
+                //var userManager = builder.Services.BuildServiceProvider().GetService<UserManager<ApplicationUser>>();
+                //var roleManager = builder.Services.BuildServiceProvider().GetService<RoleManager<IdentityRole>>();
+
+                //await DefaultRoles.SeedAsync(userManager, roleManager);
+                //await DefaultAdminUser.SeedAsync(userManager, roleManager);
+                //await DefaultBasicUser.SeedAsync(userManager, roleManager);
 
 
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+          
             // Add services to the container.
             builder.Services.AddApplicationLayer();
+           // builder.AddIdentityInfraestructure(builder.Configuration);
             builder.Services.AddSharedInfraestructure(builder.Configuration);
 
             builder.Services.AddPersistenceInfraestructure(builder.Configuration);
+            builder.Services.AddIdentityInfraestructure(builder.Configuration);
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

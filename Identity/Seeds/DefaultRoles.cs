@@ -14,8 +14,18 @@ namespace Identity.Seeds
         public static async Task SeedAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             //seed roles
-            await roleManager.CreateAsync(new IdentityRole(Roles.Admin.ToString()));
-            await roleManager.CreateAsync(new IdentityRole(Roles.Basic.ToString()));
+            try
+            {
+                await roleManager.CreateAsync(new IdentityRole(Roles.Admin.ToString()));
+                await roleManager.CreateAsync(new IdentityRole(Roles.Basic.ToString()));
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+       
         }
     }
 }

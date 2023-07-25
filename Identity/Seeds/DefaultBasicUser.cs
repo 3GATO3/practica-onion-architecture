@@ -29,7 +29,7 @@ namespace Identity.Seeds
                 if (user == null)
                 {
                     await userManager.CreateAsync(defaultUser, "123password@");
-                    await userManager.AddToRoleAsync(defaultUser, Roles.Admin.ToString());
+                    await userManager.AddToRoleAsync(defaultUser, Roles.Basic.ToString());
                 }
             }
         }
