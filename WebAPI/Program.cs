@@ -69,7 +69,7 @@ namespace WebAPI
 
             app.UseAuthorization();
             app.UseErrorHandlingMiddleware();
-
+            app.UseAuthentication();
 
             app.MapControllers();
 

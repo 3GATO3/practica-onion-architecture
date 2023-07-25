@@ -29,7 +29,7 @@ namespace Identity
             b => b.MigrationsAssembly(typeof(IdentityContext).Assembly.FullName)));
             services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<IdentityContext>().AddDefaultTokenProviders();
             #region Services
-            //services.AddTransient<AccountService>();
+            services.AddTransient<AccountService>();
             #endregion
             services.Configure<JWTSettings>(configuration.GetSection("JWTSettings"));
             services.AddAuthentication(options =>
