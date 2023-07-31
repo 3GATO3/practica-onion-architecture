@@ -1,7 +1,9 @@
 ﻿
 using Aplication.Wrappers;
+using Newtonsoft.Json;
 using System.Net;
 using System.Text.Json;
+using System.Web.Helpers;
 
 namespace WebAPI.Middlewares
 {
@@ -18,7 +20,15 @@ namespace WebAPI.Middlewares
         {
             try
             {
-                await _next(context);
+                if (!context.Response.HasStarted)
+                {
+                    await _next(context);
+                }
+                else
+                {
+                    await context.Response.WriteAsync(Json.Encode( string.Empty));
+                }
+                
             }
             catch (Exception error)
             {
@@ -51,9 +61,9 @@ namespace WebAPI.Middlewares
                         break;
                 }
 
-                var result = JsonSerializer.Serialize(responseModel);
+                var result = System.Text.Json.JsonSerializer.Serialize(responseModel);
                 await response.WriteAsync(result);
-                //throw;
+                
             }
 
         }

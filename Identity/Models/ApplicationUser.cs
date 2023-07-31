@@ -10,8 +10,8 @@ namespace Identity.Models
 {
     public class ApplicationUser: IdentityUser
     {
-        [Key]
-        public string Id { get; set; }
+     
+        override public string? Id { get; set; }
         public string Nombre { get; set; }
         public string Apellido { get; set; }
     }

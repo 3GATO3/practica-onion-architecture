@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Aplication.Features.Clientes.Queries.GetClienteById
 {
-    public class GetClienteByIdQuery: IRequest<Response<ClienteDto>>
+    public class GetClienteByIdQuery : IRequest<Response<ClienteDto>>
     {
         public int Id { get; set; }
 

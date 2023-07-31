@@ -8,7 +8,7 @@ namespace Application.DTOs.Users
 {
     public class RefreshToken
     {
-        public int Id { get; set; }    
+        public int? Id { get; set; }    
         public string Token { get; set; }
         public DateTime Expires { get; set; }
         public bool IsExpired => DateTime.Now >= Expires;

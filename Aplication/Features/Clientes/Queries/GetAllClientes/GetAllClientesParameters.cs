@@ -11,5 +11,6 @@ namespace Aplication.Features.Clientes.Queries.GetAllClientes
     {
         public string? Nombre { get; set; }
         public string? Apellido { get; set; }
+        public string? Birth { get; set; }
     }
 }

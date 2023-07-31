@@ -6,6 +6,7 @@ using Aplication.Features.Clientes.Queries.GetAllClientes;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Aplication.Features.Clientes.Queries.GetClienteByMonth;
 
 namespace WebAPI.Controllers.v1
 {
@@ -25,9 +26,24 @@ namespace WebAPI.Controllers.v1
         {
             return Ok(await Mediator.Send(new GetClienteByIdQuery { Id = id }));
         }
+        //HappyBirthday
+        [HttpGet("GetByMonth")]
+        public async Task<IActionResult> GetByMonth([FromQuery] GetClienteByMonthParameters filter)
+        {
+            return Ok(await Mediator.Send(new GetClienteByMonthQuery
+            {
+                PageNumber = filter.PageNumber,
+                PageSize = filter.PageSize,
+                Birth = filter.BirthMonth
+            }));
+        }
+
+
+
+
 
         //POST api/<controller>
-      
+
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> Post(CreateClienteCommand command)

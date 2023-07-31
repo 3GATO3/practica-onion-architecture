@@ -8,17 +8,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Application.Features.Authenticate.Commands.RegisterCommand
 {
     public class RegisterCommand: IRequest<Response<String>>
     {
-        public string Nombre { get; set; }
-        public string Apellido { get; set; }
-        public string UserName { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public string ConfirmPassword { get; set; }
-        public string Origin { get; set; }
+        public string? Nombre { get; set; }
+        public string? Apellido { get; set; }
+        public string? UserName { get; set; }
+        public string? Email { get; set; }
+        public string? Password { get; set; }
+        public string? ConfirmPassword { get; set; }
+        public string? Origin { get; set; }
     }
     public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Response<string>>
     {

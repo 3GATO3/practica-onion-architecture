@@ -9,15 +9,12 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces
 {
-    public class IAccountService
+    public interface IAccountService
     {
-        public Task<Response<AuthenticationResponse>> AuthenticateAsync(AuthenticationRequest request,string ipAddress)
-        {
-            throw new NotImplementedException();
-        }
-        public Task<Response<string>> RegisterAsync(RegisterRequest request, string origin)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<Response<AuthenticationResponse>> AuthenticateAsync(AuthenticationRequest request, string ipAddress);
+
+
+        public Task<Response<string>> RegisterAsync(RegisterRequest request, string origin);
+     
     }
 }

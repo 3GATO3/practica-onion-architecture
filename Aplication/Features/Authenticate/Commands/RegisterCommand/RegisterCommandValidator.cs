@@ -25,11 +25,14 @@ namespace Application.Features.Authenticate.Commands.RegisterCommand
       .MaximumLength(10).WithMessage("{PropertyName} no puede exceder los {MaxLength} caracteres");
 
             RuleFor(p => p.Password).NotEmpty().WithMessage("{PropertyName} no puede ser vacio")
-      .MaximumLength(815).WithMessage("{PropertyName} no puede exceder los {MaxLength} caracteres");
+      .MaximumLength(85).WithMessage("{PropertyName} no puede exceder los {MaxLength} caracteres")
+      .Matches("^(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).{8,}$").WithMessage("la contraseña debe tener un numero, un caracter no alfanumerico y una mayuscula");
 
             RuleFor(p => p.ConfirmPassword).NotEmpty().WithMessage("{PropertyName} no puede ser vacio")
       .MaximumLength(80).WithMessage("{PropertyName} no puede exceder los {MaxLength} caracteres")
-      .Equal(p=>p.Password).WithMessage("{PropertyName} debe ser igual a password");
+      .Equal(p=>p.Password).WithMessage("{PropertyName} debe ser igual a password")
+            .Matches("^(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).{8,}$").WithMessage("la contraseña debe tener un numero, un caracter no alfanumerico y una mayuscula");
+            ;
         }
 
 

@@ -44,7 +44,8 @@ namespace WebAPI.Controllers
                 return Request.Headers["X-Forwarded-For"];
 
             }
-            else return HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
+            else 
+                return HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
             
         }
 

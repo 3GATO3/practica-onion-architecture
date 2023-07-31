@@ -1,4 +1,5 @@
 ﻿using Aplication.Wrappers;
+using Application.Interfaces;
 using Domain.Settings;
 using Identity.Context;
 using Identity.Models;
@@ -27,9 +28,17 @@ namespace Identity
             services.AddDbContext<IdentityContext>(options => options.UseSqlServer(
             configuration.GetConnectionString("IdentityConnection"),
             b => b.MigrationsAssembly(typeof(IdentityContext).Assembly.FullName)));
-            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<IdentityContext>().AddDefaultTokenProviders();
+
+
+            services.AddIdentity<ApplicationUser, IdentityRole>().AddSignInManager<SignInManager<ApplicationUser>>().
+                AddUserManager<UserManager<ApplicationUser>>().
+                AddRoles<IdentityRole>().
+                AddEntityFrameworkStores<IdentityContext>().AddDefaultTokenProviders();
+            
+            
+            
             #region Services
-            services.AddTransient<AccountService>();
+            services.AddTransient<IAccountService,AccountService>();
             #endregion
             services.Configure<JWTSettings>(configuration.GetSection("JWTSettings"));
             services.AddAuthentication(options =>
@@ -46,7 +55,7 @@ namespace Identity
                     ValidateIssuerSigningKey = true,
                     ValidateIssuer = true,
                     ValidateAudience = true,
-                    ValidateLifetime = true,
+                    ValidateLifetime = false,
                     ClockSkew = TimeSpan.Zero,
                     ValidIssuer = configuration["JWTSettings:Issuer"],
                     ValidAudience = configuration["JWTSettings:Audience"],
@@ -65,11 +74,16 @@ namespace Identity
                     },
                     OnChallenge = context =>
                     {
-                        context.HandleResponse();
-                        context.Response.StatusCode = 401;
-                        context.Response.ContentType = "application/json";
-                        var result = JsonConvert.SerializeObject(new Response<string>("Usted no está autorizado"));
-                        return context.Response.WriteAsync(result);
+                        if (!context.Response.HasStarted)
+                        {
+                            context.HandleResponse();
+                            context.Response.StatusCode = 401;
+                            context.Response.ContentType = "application/json";
+                            var result = JsonConvert.SerializeObject(new Response<string>("Usted no está autorizado"));
+                            return context.Response.WriteAsync(result);
+                       }
+                        else
+                        return context.Response.WriteAsync(string.Empty);
                     },
 
                     OnForbidden = Context =>
